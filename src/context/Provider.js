@@ -5,6 +5,7 @@ import fetchApi from '../services/fetchApi';
 
 const Provider = ({ children }) => {
   const [dataPlanets, setDataPlanets] = useState([]);
+
   const [filters, setFilters] = useState({
     filterByName: {
       name: '',

@@ -1,5 +1,3 @@
-// Componente refatorado com base no PR de Thalles Carneiro: https://github.com/tryber/sd-012-project-starwars-planets-search/pull/107/commits/bd26d9a587b7d64bb06e640d93e6d4cac3b28d1e
-
 import React, { useContext } from 'react';
 import Context from '../../context/Context';
 
@@ -7,8 +5,10 @@ function Table() {
   const { dataPlanets, filters } = useContext(Context);
   const { filterByName: { name } } = filters;
 
-  const headers = (dataPlanets.length > 0)
-    && Object.keys(dataPlanets[0]).filter((header) => header !== 'residents');
+  let headers = [];
+  if (dataPlanets.length > 0) {
+    headers = Object.keys(dataPlanets[0]).filter((header) => header !== 'residents');
+  }
 
   const renderTableHeader = () => (
     <thead>
@@ -53,3 +53,5 @@ function Table() {
 }
 
 export default Table;
+
+// refatoração do requisito 2 com base no PR de Thalles Carneiro: https://github.com/tryber/sd-012-project-starwars-planets-search/pull/107/commits/bd26d9a587b7d64bb06e640d93e6d4cac3b28d1e
