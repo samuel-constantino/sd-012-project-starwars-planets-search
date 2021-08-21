@@ -4,9 +4,11 @@ import React, { useContext } from 'react';
 import Context from '../../context/Context';
 
 function Table() {
-  const { dataPlanets } = useContext(Context);
+  const { dataPlanets, filters } = useContext(Context);
+  const { filterByName: { name } } = filters;
 
-  const headers = Object.keys(dataPlanets[0]).filter((header) => header !== 'residents');
+  const headers = (dataPlanets.length > 0)
+    && Object.keys(dataPlanets[0]).filter((header) => header !== 'residents');
 
   const renderTableHeader = () => (
     <thead>
@@ -18,23 +20,27 @@ function Table() {
     </thead>
   );
 
-  const renderTableBody = () => (
-    <tbody>
-      {
-        dataPlanets.map((planet) => (
-          <tr key={ planet.name }>
-            {
-              headers.map((header) => (
-                <td key={ planet[header] }>
-                  { planet[header] }
-                </td>
-              ))
-            }
-          </tr>
-        ))
-      }
-    </tbody>
-  );
+  const renderTableBody = () => {
+    const filterByName = dataPlanets
+      .filter((planet) => planet.name.toLowerCase().includes(name.toLowerCase()));
+    return (
+      <tbody>
+        {
+          filterByName.map((planet) => (
+            <tr key={ planet.name }>
+              {
+                headers.map((header) => (
+                  <td key={ planet[header] }>
+                    { planet[header] }
+                  </td>
+                ))
+              }
+            </tr>
+          ))
+        }
+      </tbody>
+    );
+  };
 
   if (!headers) return <h2>Loading</h2>;
 
