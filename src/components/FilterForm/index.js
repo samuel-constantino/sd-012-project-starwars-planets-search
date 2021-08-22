@@ -5,9 +5,9 @@ import Input from '../Input';
 import Button from '../Button';
 
 function FilterForm() {
-  const { filters, setFilters } = useContext(Context);
+  const { filters, setFilters, setApplyFilters } = useContext(Context);
   const { filterByName: { name } } = filters;
-  const { filterByNumericValues: { column = '', comparison = '', value = '' } } = filters;
+  const { filterByNumericValues: { column, comparison, value } } = filters;
 
   const handleChangeName = ({ target: { value: v } }) => {
     setFilters({
@@ -105,7 +105,7 @@ function FilterForm() {
     <Button
       label="Aplicar"
       id="button-filter"
-      onClick={ () => {} }
+      onClick={ () => setApplyFilters(true) }
     />
   );
 

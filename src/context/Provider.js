@@ -14,10 +14,12 @@ const Provider = ({ children }) => {
       {
         column: '',
         comparison: '',
-        value: '',
+        value: 0,
       },
     ],
   });
+
+  const [applyFilters, setApplyFilters] = useState(false);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -31,6 +33,8 @@ const Provider = ({ children }) => {
     dataPlanets,
     filters,
     setFilters,
+    applyFilters,
+    setApplyFilters,
   };
 
   return (
