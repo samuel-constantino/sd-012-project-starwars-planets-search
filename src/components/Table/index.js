@@ -4,9 +4,10 @@ import Context from '../../context/Context';
 function Table() {
   const { dataPlanets, filters } = useContext(Context);
   const { filterByName: { name } } = filters;
+  // const { filterByNumericValues: { column, comparison, value } } = filters;
 
   let headers = [];
-  if (dataPlanets.length > 0) {
+  if (dataPlanets.length) {
     headers = Object.keys(dataPlanets[0]).filter((header) => header !== 'residents');
   }
 
@@ -20,27 +21,31 @@ function Table() {
     </thead>
   );
 
-  const renderTableBody = () => {
-    const filterByName = dataPlanets
-      .filter((planet) => planet.name.toLowerCase().includes(name.toLowerCase()));
-    return (
-      <tbody>
-        {
-          filterByName.map((planet) => (
-            <tr key={ planet.name }>
-              {
-                headers.map((header) => (
-                  <td key={ planet[header] }>
-                    { planet[header] }
-                  </td>
-                ))
-              }
-            </tr>
-          ))
-        }
-      </tbody>
-    );
+  const appliedFilters = () => {
+    let filter = [...dataPlanets];
+    filter = dataPlanets.filter((planet) => (
+      planet.name.toLowerCase().includes(name.toLowerCase())));
+
+    return filter;
   };
+
+  const renderTableBody = () => (
+    <tbody>
+      {
+        appliedFilters().map((planet) => (
+          <tr key={ planet.name }>
+            {
+              headers.map((header) => (
+                <td key={ planet[header] }>
+                  { planet[header] }
+                </td>
+              ))
+            }
+          </tr>
+        ))
+      }
+    </tbody>
+  );
 
   if (!headers) return <h2>Loading</h2>;
 
