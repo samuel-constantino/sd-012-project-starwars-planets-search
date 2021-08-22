@@ -1,13 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Context from '../../context/Context';
 import Select from '../Select';
 import Input from '../Input';
 import Button from '../Button';
 
 function FilterForm() {
-  const { filters, setFilters, setApplyFilters } = useContext(Context);
+  const [numericFilterComponent, setNumericFilterComponent] = useState({
+    columnComponent: 'population',
+    comparisonComponent: 'maior que',
+    valueComponent: 0,
+  });
+  const { filters, setFilters } = useContext(Context);
   const { filterByName: { name } } = filters;
-  const { filterByNumericValues: { column, comparison, value } } = filters;
 
   const handleChangeName = ({ target: { value: v } }) => {
     setFilters({
@@ -19,36 +23,40 @@ function FilterForm() {
   };
 
   const handleChangeColumn = ({ target: { value: v } }) => {
-    setFilters({
-      ...filters,
-      filterByNumericValues: {
-        column: v,
-        comparison,
-        value,
-      },
+    setNumericFilterComponent({
+      ...numericFilterComponent,
+      columnComponent: v,
     });
   };
 
   const handleChangeComparison = ({ target: { value: v } }) => {
-    setFilters({
-      ...filters,
-      filterByNumericValues: {
-        column,
-        comparison: v,
-        value,
-      },
+    setNumericFilterComponent({
+      ...numericFilterComponent,
+      comparisonComponent: v,
     });
   };
 
   const handleChangeValue = ({ target: { value: v } }) => {
+    setNumericFilterComponent({
+      ...numericFilterComponent,
+      valueComponent: v,
+    });
+  };
+
+  const handleClick = () => {
+    const {
+      columnComponent,
+      comparisonComponent,
+      valueComponent } = numericFilterComponent;
     setFilters({
       ...filters,
       filterByNumericValues: {
-        column,
-        comparison,
-        value: v,
+        column: columnComponent,
+        comparison: comparisonComponent,
+        value: valueComponent,
       },
     });
+    // setApplyFilters(true);
   };
 
   const renderFilterByName = () => (
@@ -62,6 +70,8 @@ function FilterForm() {
   );
 
   const renderFilterByColumn = () => {
+    const { columnComponent } = numericFilterComponent;
+
     const options = [
       'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
@@ -69,7 +79,7 @@ function FilterForm() {
       <Select
         label="Coluna: "
         id="column-filter"
-        value={ column }
+        value={ columnComponent }
         options={ options }
         onChange={ handleChangeColumn }
       />
@@ -77,6 +87,8 @@ function FilterForm() {
   };
 
   const renderFilterByComparison = () => {
+    const { comparisonComponent } = numericFilterComponent;
+
     const options = [
       'maior que', 'menor que', 'igual a'];
 
@@ -84,28 +96,32 @@ function FilterForm() {
       <Select
         label="Comparação: "
         id="comparison-filter"
-        value={ comparison }
+        value={ comparisonComponent }
         options={ options }
         onChange={ handleChangeComparison }
       />
     );
   };
 
-  const renderFilterByValue = () => (
-    <Input
-      label="Valor: "
-      id="value-filter"
-      type="number"
-      value={ value }
-      onChange={ handleChangeValue }
-    />
-  );
+  const renderFilterByValue = () => {
+    const { valueComponent } = numericFilterComponent;
+
+    return (
+      <Input
+        label="Valor: "
+        id="value-filter"
+        type="number"
+        value={ valueComponent }
+        onChange={ handleChangeValue }
+      />
+    );
+  };
 
   const renderFilterButton = () => (
     <Button
       label="Aplicar"
       id="button-filter"
-      onClick={ () => setApplyFilters(true) }
+      onClick={ handleClick }
     />
   );
 

@@ -19,8 +19,6 @@ const Provider = ({ children }) => {
     ],
   });
 
-  const [applyFilters, setApplyFilters] = useState(false);
-
   useEffect(() => {
     const fetchPlanets = async () => {
       const planets = await fetchApi();
@@ -33,8 +31,6 @@ const Provider = ({ children }) => {
     dataPlanets,
     filters,
     setFilters,
-    applyFilters,
-    setApplyFilters,
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Context from '../../context/Context';
 
 function Table() {
-  const { dataPlanets, filters, applyFilters } = useContext(Context);
+  const { dataPlanets, filters } = useContext(Context);
   const { filterByName: { name } } = filters;
   const { filterByNumericValues: { column, comparison, value } } = filters;
 
@@ -29,26 +29,24 @@ function Table() {
       planet.name.toLowerCase().includes(name.toLowerCase())));
 
     // filtro por seletores (coluna, comparação, valor)
-    if (applyFilters) {
-      switch (comparison) {
-      case 'maior que':
-        filter = filter.filter((planet) => (
-          planet[column] > +value
-        ));
-        break;
-      case 'igual a':
-        filter = filter.filter((planet) => (
-          planet[column] === value
-        ));
-        break;
-      case 'menor que':
-        filter = filter.filter((planet) => (
-          planet[column] < +value
-        ));
-        break;
-      default:
-        return filter;
-      }
+    switch (comparison) {
+    case 'maior que':
+      filter = filter.filter((planet) => (
+        planet[column] > +value
+      ));
+      break;
+    case 'igual a':
+      filter = filter.filter((planet) => (
+        planet[column] === value
+      ));
+      break;
+    case 'menor que':
+      filter = filter.filter((planet) => (
+        planet[column] < +value
+      ));
+      break;
+    default:
+      return filter;
     }
     return filter;
   };
