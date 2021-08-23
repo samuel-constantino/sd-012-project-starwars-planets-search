@@ -4,7 +4,7 @@ import Context from '../../context/Context';
 function Table() {
   const { dataPlanets, filters } = useContext(Context);
   const { filterByName: { name } } = filters;
-  const { filterByNumericValues: { column, comparison, value } } = filters;
+  const { filterByNumericValues: [{ column, comparison, value }] } = filters;
 
   let headers = [];
   if (dataPlanets.length) {

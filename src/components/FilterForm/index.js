@@ -12,6 +12,8 @@ function FilterForm() {
   });
   const { filters, setFilters } = useContext(Context);
   const { filterByName: { name } } = filters;
+  const { filterByNumericValues } = filters;
+  const { filterByNumericValues: [{ column }] } = filters;
 
   const handleChangeName = ({ target: { value: v } }) => {
     setFilters({
@@ -48,15 +50,31 @@ function FilterForm() {
       columnComponent,
       comparisonComponent,
       valueComponent } = numericFilterComponent;
-    setFilters({
-      ...filters,
-      filterByNumericValues: {
-        column: columnComponent,
-        comparison: comparisonComponent,
-        value: valueComponent,
-      },
-    });
-    // setApplyFilters(true);
+
+    if (column === '') { // se for o primeiro filtro:
+      setFilters({
+        ...filters,
+        filterByNumericValues: [
+          {
+            column: columnComponent,
+            comparison: comparisonComponent,
+            value: valueComponent,
+          },
+        ],
+      });
+    } else {
+      setFilters({
+        ...filters,
+        filterByNumericValues: [
+          ...filterByNumericValues,
+          {
+            column: columnComponent,
+            comparison: comparisonComponent,
+            value: valueComponent,
+          },
+        ],
+      });
+    }
   };
 
   const renderFilterByName = () => (
@@ -72,15 +90,23 @@ function FilterForm() {
   const renderFilterByColumn = () => {
     const { columnComponent } = numericFilterComponent;
 
+    const columnHistory = filterByNumericValues.map((filter) => filter.column);
+
     const options = [
       'population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
 
+    const filterOptions = options.filter((option) => {
+      if (!columnHistory.includes(option)) {
+        return option;
+      }
+      return console.log('');
+    });
     return (
       <Select
         label="Coluna: "
         id="column-filter"
         value={ columnComponent }
-        options={ options }
+        options={ filterOptions }
         onChange={ handleChangeColumn }
       />
     );
